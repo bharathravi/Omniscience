@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+
+	<name>Google Local Search</name>
+	<Style id="overlayStyle"> <!-- style for ScreenOverlay -->
+		<BalloonStyle>
+			<displayMode>undecorated</displayMode>
+		</BalloonStyle>
+	</Style>
+	
+	<Style id="placemarkStyle"> <!-- style for placemarkers -->
+		<BalloonStyle>
+			<displayMode>undecorated</displayMode>
+		</BalloonStyle>
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>http://argonapps.gatech.edu/search/images/icon_placemark.png</href> <!-- url to twitter logo -->
+			</Icon>
+			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction" />
+		</IconStyle>
+	</Style>
+	
+	
+	<ScreenOverlay id="main_overlay">
+		<description><![CDATA[
+        		
+			<script type="text/javascript">
+						   
+               //textBox = document.getElementById("myText");
+               //textBox.value = "Hellloooo!";
+               
+               function main_overlay_init() 
+			   {
+					
+				motherOfAllOverlays = document.getElementById("main_overlay").parentNode;
+				motherOfAllOverlays.style.position = "fixed";
+				headTag= document.getElementsByTagName('head')[0];
+				linktag = document.createElement("link");
+				linktag.setAttribute("rel", "stylesheet");
+				linktag.setAttribute("type", "text/css");
+				linktag.setAttribute("href", "http://omniscience-app.appspot.com/css/omniscience.css");
+				headTag.appendChild(linktag);			
+				
+				metaTag = document.createElement("meta");
+				metaTag.setAttribute("name", "format-detection")
+				metaTag.setAttribute("content", "telephone=no")
+				headTag.appendChild(metaTag);
+				
+				textBox = document.getElementById("inputText");
+				textBox.value = "Loading...";
+				
+				var url = 'http://omniscience-app.appspot.com/omniscience';
+								
+				
+				var txt = "";
+				var index = 0;
+				$.getJSON(url,function(json) {
+				  $.each(json.results,function(i,location) {
+				    var eventDescription = ""
+				  	                    
+                    $.each(location.events,function(i,event) {
+                      eventDescription += event.title + "<br>" + event.summary;
+                    });
+                    
+                    var divID = "div" + index;
+                    var previewText = "<b>" + location.name + "</b><br>" + location.events[0].title;
+					var myPlacemarkJSON =	
+						{   
+							description : "<div id='" + index +"' class='myPlacemarkStyle'><img src='http://argonapps.gatech.edu/search/images/icon_placemark.png' width='95' height='95' />aaaa</div>",
+							iconVisibility : "1",
+							id : "PM" + index,
+							labelVisibility : "1",
+							name : "Omniscience",
+							type : "placemark",
+							visibility : "1",
+							balloonVisibility : "1",
+							styleUrl : "#placemarkStyle",
+							geometry :      [{ 
+											 id : "GEO" + index,
+											 type : "balloon",
+											 scaleFactor: "0.80",
+											 scaleMode: "relative",
+											 orientationMode: "billboard",
+											 location : 
+											 {    
+												 id : "LOC" + index,
+												 type : "location",
+												 latitude : "33.78840",
+												 longitude : "-84.40509",
+												 altitude : "0",
+											 }
+											 }]
+							
+						};
+						var myPlacemark = new KMLPlacemark(myPlacemarkJSON);				
+                                        
+			            index = index + 1;										                                                                        				    			   		
+				  });
+				});
+				
+				textBox.value = "Done!";
+				setTimeout(function(){$("div.myPlacemarkStyle").css("opacity","1");},100);
+				textBox.value = "All Done!";
+				}                
+			</script> 
+			
+		<div id="mainWrapper" height:100%; width:100%">
+				
+			<div>										
+				  <input id="searchDistanceRange" type="range" value="5" max="10" min="1" step="1"/>
+				</div>
+				<div>	
+				  <input id="inputText" style="color:#AAAAAA;"type="text" value="Text" />
+				</div> 									
+			</div>
+						
+		]]></description>
+			
+
+		<overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/> 
+		<screenXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+		<size x="0" y="0" xunits="pixels" yunits="pixels"/>
+		
+		<styleUrl>#overlayStyle</styleUrl>  
+	
+	</ScreenOverlay>
+			
+	<styleUrl>#documentStyle</styleUrl> 
+	
+	<!-- KML document description -->
+	<Snippet>Testing Stuff Out</Snippet>
+	<description>
+		<![CDATA[
+		<p> Nothins to see here, move along.		
+		]]>
+	</description>
+	
+</Document>
+</kml>

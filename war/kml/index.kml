@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+
+	<name>Google Local Search</name>
+	
+	<Style id="documentStyle">
+		<IconStyle>
+			<Icon>
+				<href>http://argonapps.gatech.edu/search/images/icon_google.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	
+	<Style id="overlayStyle"> <!-- style for ScreenOverlay -->
+		<BalloonStyle>
+			<displayMode>undecorated</displayMode>
+		</BalloonStyle>
+	</Style>
+	
+	<Style id="placemarkStyle"> <!-- style for placemarkers -->
+		<BalloonStyle>
+			<displayMode>undecorated</displayMode>
+		</BalloonStyle>
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>http://argonapps.gatech.edu/search/images/icon_placemark.png</href> <!-- url to twitter logo -->
+			</Icon>
+			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction" />
+		</IconStyle>
+	</Style>
+	
+	
+	<ScreenOverlay id="focusButton_overlay">
+		<description><![CDATA[
+			<div id="iconDiv" class="focusButtonStyle_Google" style="visibility:hidden;"><img class="focusButtonImg" src="http://argonapps.gatech.edu/search/images/btn_google.png" /></div>
+		]]></description>
+			
+
+		<overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/> 
+		<screenXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+		<size x="0" y="0" xunits="pixels" yunits="pixels"/>
+		
+		<styleUrl>#overlayStyle</styleUrl>  
+	
+	</ScreenOverlay>
+	
+		
+	<ScreenOverlay id="main_overlay">
+		<description><![CDATA[
+        		
+			<script type="text/javascript">
+			
+			function hudElement(id) {}; //disable HUD'ing
+			
+			var thetaArray = new Array();
+			var minThetaDist = Math.PI/8;
+			var thetaStep = minThetaDist/2;		
+			var minYOffset = 180;
+			var yOffsetStep = minYOffset/2;
+			
+			var dockShift = 430;	//google ipad: 430	
+			var dockVisible = false;
+			
+			var locationArray = new Array();
+			var selectedPlacemarkIndex = -1;
+			
+			var resultsPerPage = 8;
+			var currentPage = 0;
+			
+			var settingsVisible = false;
+			var searchRadius = 5; //km
+			
+			var linkTag;
+			var readyInterval;
+			
+			var mainWrapper;
+			var iconDiv;
+			var settingsButton;
+			var settingsButton_gearWhite;
+			var settingsButton_gearBlue;		
+			
+			//load all images at start-up
+			var imageSourceArray = new Array();			
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/down.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/downPressed.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/gear.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/gear_blue.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/searchImg.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/spinnerImg.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/btn_google.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/icon_google.png");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/small_google.gif");
+			imageSourceArray.push("http://argonapps.gatech.edu/search/images/icon_placemark.png");
+			
+			var loadedImageCountMax = imageSourceArray.length;
+			var loadedImageCount = 0;
+			
+			var startupImagesArray = new Array();
+			
+			function loadImages(){
+				for(var i=0; i<imageSourceArray.length; i++)
+				{
+					startupImagesArray[i] = new Image();
+					startupImagesArray[i].src = imageSourceArray[i];
+					startupImagesArray[i].onload = function(){incrementLoadedImageCount();};
+				}
+			}
+			
+			
+			function incrementLoadedImageCount(){ //only show UI after all images have loaded
+				loadedImageCount++;
+				if(loadedImageCount == loadedImageCountMax){
+					mainWrapper.style.visibility = "inherit";
+					iconDiv.style.visibility = "inherit";
+				}
+			}
+
+			
+            function handleFocus()
+            {
+                var focus = KHARMA.getFocus();
+                for (kmlObjId in KHARMA.dom.elements)
+                {
+                    var kmlObj = KHARMA.dom.elements[kmlObjId];
+                    if (kmlObj.type == "screenoverlay" && kmlObj.id != "focusButton_overlay")
+                    {
+                        kmlObj.visibility = focus;
+                        kmlObj.render();
+                    }
+                    else if (kmlObj.type == "placemark")
+                    {
+                        kmlObj.balloonVisibility = focus;
+                        kmlObj.render();
+                   }
+                }
+            }
+            
+			function main_overlay_init() 
+			{
+				mainWrapper = document.getElementById("mainWrapper");
+				iconDiv = document.getElementById("iconDiv");
+				settingsButton = document.getElementById("settingsButton");
+				settingsButton_gearWhite = document.getElementById("settingsButton_gearWhite");
+				settingsButton_gearBlue = document.getElementById("settingsButton_gearBlue");
+				
+				document.getElementById("dockDiv").addEventListener("touchmove", hideData, false);
+                document.getElementById("settingsButton").addEventListener("click", toggleSettingsVisibility, false);
+				document.getElementById("searchDistanceRange").addEventListener("change", updateSearchDistance, false);
+
+				$(document).bind('focusChanged',function(event) {handleFocus()});
+				
+				document.getElementById("keywordTxt").addEventListener("focus", focusSearchText, false);
+				document.getElementById("keywordTxt").addEventListener("blur", blurSearchText, false);
+
+				motherOfAllOverlays = document.getElementById("main_overlay").parentNode;
+				motherOfAllOverlays.style.position = "fixed"; //prevents viewport from sliding to the left when search textbox is brought to focus
+			
+				headTag= document.getElementsByTagName('head')[0];
+				linktag = document.createElement("link");
+				linktag.setAttribute("rel", "stylesheet");
+				linktag.setAttribute("type", "text/css");
+				linktag.setAttribute("href", "http://argonapps.gatech.edu/search/styles/searchStyles.css");
+				headTag.appendChild(linktag);
+			
+				metaTag = document.createElement("meta");
+				metaTag.setAttribute("name", "format-detection")
+				metaTag.setAttribute("content", "telephone=no")
+				headTag.appendChild(metaTag);
+			
+				loadImages();	
+        	}
+		
+				
+			function removePlacemarkers() //called in between searches to clear out old placemarkers before new ones are added
+			{
+				for (kmlObjId in KHARMA.dom.elements)
+				{
+					var kmlObj = KHARMA.dom.elements[kmlObjId];
+					var feature = document.getElementById(kmlObj.id);
+					if (feature && kmlObjId.substring(0,2) == 'PM') //only removes objects with the substring "PM" at the beginning of their id (short for "PlaceMarker").  without this extra condition, this function would remove everything in the scene, including the UI
+					{
+						$(feature).remove();
+						KHARMA.dom.removeElementWithID(kmlObj.id);
+					}
+				}
+			}
+
+
+
+			function googleLocalSearch(newPage) //called when submit button is pressed
+			{					
+				currentPage = Math.max(newPage, 0);
+				
+				hideData();
+				
+				document.getElementById("searchInput").style.opacity = "0";
+				document.getElementById("searchSpinner").style.visibility = "visible";
+				document.getElementById("searchSpinner").style.opacity = "1";
+				$("#keywordTxt").blur();
+				
+				$("div.myPlacemarkStyle").css("opacity","0");
+				setTimeout(function(){completeSearch(newPage);}, 250);
+			}
+			
+			function completeSearch(newPage){		
+				removePlacemarkers(); //clear out old placemarkers, if any
+				
+				var searchTerm = document.getElementById("keywordTxt").value;
+				
+				var myLoc = KHARMA.getLocation();																		
+				var myLat = myLoc.latitude;
+				var myLon = myLoc.longitude;
+				var myAlt = myLoc.altitude;
+				var startIndex = currentPage*resultsPerPage;
+				
+				var coordDiff_lat = 0.009009 * searchRadius; //about 1 mile in degrees latitude
+				var coordDiff_lon = 0.010870 * searchRadius; //about 1 mile in degrees longitude
+				
+				//build the URL that requests data from Flickr API
+				var url = 'http://ajax.googleapis.com/ajax/services/search/local?v=1.0&callback=?&rsz=' + resultsPerPage + '&sll=' + myLat + ',' + myLon + '&sspn=' + coordDiff_lat + ',' + coordDiff_lon + '&q=' + searchTerm + '&start=' + startIndex;
+					
+							
+				locationArray = new Array();
+				thetaArray = new Array();
+				selectedPlacemarkIndex = -1;
+				var resultsWithGeoData = 0;
+
+				$.getJSON(url,function(json) //get JSON data from twitter.com
+				{
+					var resultCount = json.responseData.results.length;
+					
+					$.each(json.responseData.results,function(i,location)
+					{						
+						var index = resultsWithGeoData;
+						resultsWithGeoData++;
+						
+						var pmLat = location.lat;
+						var pmLon = location.lng;
+						var pmName = location.titleNoFormatting;
+						
+						var phoneNumbers = "";
+						
+						for(var p=0; p<location.phoneNumbers.length; p++)
+						{
+							var type = location.phoneNumbers[p].type;
+							var num = location.phoneNumbers[p].number;
+							var numNoDash = stripDashes(num);
+							
+							if(type != "")
+							{
+								phoneNumbers = phoneNumbers + type + ": " + "<a href='tel:" + numNoDash + "'>" + num + "</a>";
+							}
+							else
+							{
+								phoneNumbers = phoneNumbers + "<a href='tel:" + numNoDash + "'>" + num + "</a>";
+							}
+							
+							if(p < location.phoneNumbers.length-1)
+							{
+								phoneNumbers = phoneNumbers + "<br>";
+							}
+						}
+						
+						
+						var outputData = location.streetAddress + "<br>" + location.city + ", " + location.region + "<br><br>" + phoneNumbers;
+					
+						var previewText = trimText(pmName, 24);
+						
+						
+						//overlap correction
+						var rad = Math.sqrt(Math.pow(pmLon-myLon,2) + Math.pow(pmLat-myLat,2));
+						var theta = Math.asin((pmLat-myLat)/rad);
+						thetaArray[index] = new Array(3);
+						thetaArray[index][0] = index;
+						thetaArray[index][1] = theta;
+						thetaArray[index][2] = 0;
+						
+						
+						locationArray[index] = new Array(2);
+						locationArray[index][0] = pmName;
+						locationArray[index][1] = outputData;
+
+						var divID = "div" + index
+
+						var myPlacemarkJSON =	
+						{   
+							description : "<div id=" + divID + " class='myPlacemarkStyle' onclick='dockPlacemark(" + index + ");'><img src='http://argonapps.gatech.edu/search/images/icon_placemark.png' width='95' height='95' />" + previewText + "</div>",
+							iconVisibility : "0",
+							id : "PM" + index,
+							labelVisibility : "0",
+							name : "Google Local",
+							type : "placemark",
+							visibility : "1",
+							balloonVisibility : "1",
+							styleUrl : "#placemarkStyle",
+							geometry :      [{ 
+											 id : "GEO" + index,
+											 type : "balloon",
+											 scaleFactor: "0.80",
+											 scaleMode: "relative",
+											 orientationMode: "billboard",
+											 location : 
+											 {    
+												 id : "LOC" + index,
+												 type : "location",
+												 latitude : pmLat,
+												 longitude : pmLon,
+												 altitude : myAlt,
+											 }
+											 }]
+							
+						};
+						var myPlacemark = new KMLPlacemark(myPlacemarkJSON);
+						
+					});
+
+					calculateDynamicSpread();
+					spreadMarkers();
+					
+					var nextResultsLink = "";
+					var prevResultsLink = "";		
+					
+					var moreResultsLink = "";	
+					if(currentPage > 0)
+					{
+						prevResultsLink = "<a href='javascript:googleLocalSearch(currentPage-1)' style='color:0' onclick='this.style.color = \"#0085B0\"'>&lt;&lt;</a>&nbsp;&nbsp;";
+					}
+					
+					if(resultCount >= resultsPerPage)						
+					{
+						nextResultsLink = "&nbsp;&nbsp;<a href='javascript:googleLocalSearch(currentPage+1)' style='color:0' onclick='this.style.color = \"#0085B0\"'>&gt;&gt;</a>";
+					}
+						
+					var resultRange = "No results";
+					if(resultCount > 0)
+					{
+						var startIndex = currentPage*resultsPerPage + 1;
+						var endIndex = currentPage*resultsPerPage + resultCount;
+						
+						resultRange = "Results " + startIndex + " - " + endIndex;
+					}
+					
+					document.getElementById("resultPrevDiv").innerHTML =  prevResultsLink;
+					document.getElementById("resultCountDiv").innerHTML = resultRange;
+					document.getElementById("resultNextDiv").innerHTML =  nextResultsLink;
+					
+					document.getElementById("searchInput").style.opacity = "1";
+					document.getElementById("searchSpinner").style.opacity = "0";
+					setTimeout(function(){document.getElementById("searchSpinner").style.visibility = "hidden";}, 600);
+					
+					document.getElementById("resultBoxDiv").style.opacity = "1";
+					
+					setTimeout(function(){$("div.myPlacemarkStyle").css("opacity","1");},100);
+				});
+				
+				
+			}
+			
+				
+			function dockPlacemark(placemarkIndex)
+			{
+				markAsVisited(selectedPlacemarkIndex);
+				selectedPlacemarkIndex = placemarkIndex;
+				markAsCurrent(selectedPlacemarkIndex);
+				
+				document.getElementById("dockTextDiv").innerHTML = locationArray[placemarkIndex][0] + '<br><br>' + locationArray[placemarkIndex][1];
+				
+				if(!dockVisible)
+				{
+					showData();
+				}
+			}	
+							
+			function spreadMarkers()
+			{
+				for(var i=0; i<thetaArray.length; i++)
+				{
+					var index = thetaArray[i][0];
+					var theta = thetaArray[i][1];
+					var yOffset = thetaArray[i][2];
+					
+					var divID = "div" + index;
+					document.getElementById(divID).style.top = yOffset;
+				}
+			}
+				
+				
+				
+			function calculateDynamicSpread()
+			{		
+				var overlapDetected = true
+				var overlapCount = 0; //safety measure, to avoid infinite loop
+				
+				while(overlapDetected)
+				{
+					overlapDetected = false;
+					
+					for(var i=0; i<thetaArray.length-1; i++)
+					{
+						for(var j=i+1; j<thetaArray.length; j++)
+						{
+							if(i != j)
+							{
+								var theta_i = thetaArray[i][1];
+								var theta_j = thetaArray[j][1];
+								var yOffset_i = thetaArray[i][2];
+								var yOffset_j = thetaArray[j][2];
+								
+								if(Math.abs(theta_i - theta_j) < minThetaDist)
+								{
+									if(Math.abs(yOffset_i - yOffset_j) < minYOffset)
+									{
+										thetaArray[i][2] += yOffsetStep;
+										thetaArray[j][2] -= yOffsetStep;
+										overlapDetected = true;
+									}
+								}
+							}
+						}
+					}
+					if(overlapCount > 15){break;}
+					overlapCount++;
+				}				
+			}
+			
+			
+			function markAsCurrent(placemarkIndex)
+			{
+				if(placemarkIndex > -1)
+				{
+					var placemarkId = "div" + placemarkIndex;
+					document.getElementById(placemarkId).style.color = "#000000";
+					document.getElementById(placemarkId).style.backgroundColor = "#FFCC00";
+					document.getElementById(placemarkId).style.borderColor = "#CC7A00";
+				}
+			}
+			
+			function markAsVisited(placemarkIndex)
+			{
+				if(placemarkIndex > -1)
+				{
+					var placemarkId = "div" + placemarkIndex;
+					
+					document.getElementById(placemarkId).style.color = "#000000";
+					document.getElementById(placemarkId).style.backgroundColor = "#FFF1B9";
+					document.getElementById(placemarkId).style.borderColor = "#FFB442";
+				}
+			}
+			
+			function activateDownButton()
+			{
+				$("#downDiv").css("background-image", "url(http://argonapps.gatech.edu/search/images/downPressed.png)");  
+				setTimeout("deactivateDownButton()", 200);
+				hideData();
+			}
+			
+			function deactivateDownButton()
+			{
+				$("#downDiv").css("background-image", "url(http://argonapps.gatech.edu/search/images/down.png)"); 
+			}
+			
+			function hideData()
+			{
+				if(dockVisible)
+				{
+					document.getElementById("dockDiv").style.webkitAnimationName = "moveDown";
+					dockVisible = false;
+				}
+				
+				markAsVisited(selectedPlacemarkIndex);
+				selectedPlacemarkIndex = -1;
+			}
+			
+			function showData()
+			{
+				if(!dockVisible)
+				{
+					document.getElementById("dockDiv").style.webkitAnimationName = "moveUp";
+					dockVisible = true;
+				}
+			}
+		
+		
+			function trimText(txt, trimmedLength)
+			{
+				var text = new String(txt);
+				
+				if(text.length > trimmedLength)
+				{
+					text =  text.substring(0, (trimmedLength-3)) + "...";
+				}
+				
+				return text;
+			}
+			
+			function stripDashes(str)
+			{
+				
+				var number = new String(str);
+				var returnValue = "";
+				
+				for(var i=0; i<number.length; i++)
+				{
+					var c = number.charAt(i);
+					if(c != "-" && c != " " && c != "(" && c != ")" && c != ".") returnValue = returnValue + number.charAt(i);
+				}
+				
+				return returnValue;
+			}
+			
+
+			function focusSearchText(ev){				
+				inputText = document.getElementById("keywordTxt");
+				
+				if(inputText.value == "Search"){
+					inputText.style.color = "#000000";
+					inputText.value = "";
+				}
+			}
+			
+			function blurSearchText(){
+				inputText = document.getElementById("keywordTxt");
+
+				if(inputText.value == ""){
+					inputText.style.color = "#AAAAAA";
+					inputText.value = "Search";
+				}
+			}
+			
+			
+			function toggleSettingsVisibility(){
+				settingsVisible = !settingsVisible;
+				if(settingsVisible){ //show settingsContainer
+					settingsButton_gearWhite.style.opacity = 0;
+					settingsButton_gearBlue.style.opacity = 1;
+					document.getElementById("settingsContainer").style.webkitAnimationName = "settingsDown";
+				}
+				else{ //hide settingsContainer
+					settingsButton_gearWhite.style.opacity = 1;
+					settingsButton_gearBlue.style.opacity = 0;
+					document.getElementById("settingsContainer").style.webkitAnimationName = "settingsUp";
+				}
+			}
+			
+			function updateSearchDistance(ev){
+				searchRadius = document.getElementById("searchDistanceRange").value;
+				document.getElementById("searchDistanceValue").innerHTML = searchRadius + "km";
+			}
+
+			</script> 
+			
+			<div id="mainWrapper" style="visibility:hidden; height:100%; width:100%">
+				<div id="searchDiv">
+					<form id="inputForm" action="javascript:googleLocalSearch(0);" method="get">
+						<div id="iconLabelDiv" style="background-image:url('http://argonapps.gatech.edu/search/images/small_google.gif');"></div>
+						<input id="keywordTxt" style="color:#AAAAAA;"type="text" value="Search" />
+						<div id="searchButton">
+							<div id="searchInput" onclick="googleLocalSearch(0);"></div>
+							<div id="searchSpinner"></div>
+						</div>
+						<div id="resultBoxDiv">
+							<div id="resultPrevDiv"></div>
+							<div id="resultCountDiv"></div>
+							<div id="resultNextDiv"></div>
+						</div>
+						<div id="settingsButton">
+							<div id="settingsButton_gearBlue"></div>
+							<div id="settingsButton_gearWhite"></div>
+						</div>
+						<div id="settingsContainer">
+							<div id="searchDistanceLabel">Search Distance:</div>
+							<input id="searchDistanceRange" type="range" value="5" max="10" min="1" step="1"/>
+							<div id="searchDistanceValue">5km</div>
+						</div>
+					</form>
+				</div>			
+						
+				<div id="dockDiv">
+					<div id="dockLeftDiv"></div>
+					<div id="dockRightDiv"></div>
+					<div id="downDiv" onclick="activateDownButton();"></div>
+					<div id="dockTextDiv"></div>
+				</div>
+			</div>
+				
+			
+		]]></description>
+			
+
+		<overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/> 
+		<screenXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+		<size x="0" y="0" xunits="pixels" yunits="pixels"/>
+		
+		<styleUrl>#overlayStyle</styleUrl>  
+	
+	</ScreenOverlay>
+	
+	
+	
+	<styleUrl>#documentStyle</styleUrl> 
+	
+	<!-- KML document description -->
+	<Snippet>Google Local Search for Argon AR Browser</Snippet>
+	<description>
+		<![CDATA[
+		<p><b>Google Local Search Instructions</b></p>
+		<p>This app displays groups of nearby businesses and other locations, within 5km of you.</p>
+		<p>Enter a keyword and press the search button to begin searching for locations.  Results will appear as placemarks floating within the browser.</p>
+		<p>Click on a placemark to view location and contact information. When you're done, slide your finger down over the information to hide it.</p>
+		
+		]]>
+	</description>
+	
+</Document>
+</kml>
