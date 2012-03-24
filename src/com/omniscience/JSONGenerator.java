@@ -25,6 +25,7 @@ public class JSONGenerator {
 	    		JSONObject eventJson = new JSONObject();
 	    		eventJson.put("title", event.getTitle());
 	    		eventJson.put("summary", event.getSummary());
+	    		eventJson.put("when", event.getWhen());
 	    		events.put(eventJson);
 	    	}
 	    	

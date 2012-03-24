@@ -8,6 +8,7 @@ package com.omniscience.jdo;
 public class Event {
    private String title;
    private String summary;
+   private String when;
 
 public String getTitle() {
 	return title;
@@ -21,5 +22,11 @@ public String getSummary() {
 public void setSummary(String summary) {
 	this.summary = summary;
 }
-   
+public String getWhen() {
+	return when;
+}
+public void setWhen(String when) {
+	this.when = when;
+}
+ 
 }

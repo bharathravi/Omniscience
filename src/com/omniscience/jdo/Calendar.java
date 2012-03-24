@@ -1,5 +1,6 @@
 package com.omniscience.jdo;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -17,7 +18,8 @@ import com.google.appengine.api.datastore.Key;
 public class Calendar {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String key;
 	
 	@Persistent
 	private String name;
@@ -35,8 +37,11 @@ public class Calendar {
 	
 	@Persistent
 	private String url;
+	
+	@Persistent
+	private String owner;
 		
-	public Calendar(String name, String latitude, String longitude, 
+	public Calendar(String owner, String name, String latitude, String longitude, 
 			String altitude, String description, String url) {
 			this.name = name;
 		this.longitude = longitude;
@@ -44,11 +49,12 @@ public class Calendar {
 		this.altitude = altitude;
 		this.url = url;		
 		this.description = description;
+		this.owner = owner;
 	}
 	
-	public Key getKey() {
+	public String getKey() {
 		return key;		
-	}
+	}	
 			
 	public String getDescription() {
 		return description;
@@ -78,6 +84,10 @@ public class Calendar {
 
 	public void setLatitude(String latitude) {
 		this.latitude = latitude;
+	}
+	
+	public void setKey(String key) {
+	  this.key = key;	
 	}
 
 	public String getLongitude() {

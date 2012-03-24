@@ -4,6 +4,7 @@ import com.omniscience.jdo.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -54,6 +55,7 @@ public class XMLParser {
         		}
         	} else if (qName.equalsIgnoreCase(Constants.SUMMARY)) {
         		if (inEvent) {
+        			parseSummary(tempValue, event);
         			event.setSummary(tempValue);
         		}
         	} else if (qName.equalsIgnoreCase(Constants.SUBTITLE)) {
@@ -64,33 +66,56 @@ public class XMLParser {
         	
         }
 
-        public void characters(char ch[], int start, int length) throws SAXException {
+        private void parseSummary(String tempValue, Event event) {			
+			if (isRecurringEvent(tempValue)) {
+				int whenIndex = tempValue.indexOf("First start:");
+				int endIndex = tempValue.indexOf("<br>", whenIndex);
+				int duration = tempValue.indexOf("Duration:");
+				int endDuration = tempValue.indexOf("\n", duration);
+				
+				String when = tempValue.substring(whenIndex + 13, endIndex);
+				when += " for " + Integer.parseInt(tempValue.substring(duration+ 10, endDuration))/3600 + " hour(s)";
+				event.setWhen(when);				
+			} else {
+				int whenIndex = tempValue.indexOf("When: ");
+				int endIndex = tempValue.indexOf("&nbsp");
+				
+				String timezone = tempValue.substring(endIndex + 7, endIndex + 10);
+				event.setWhen(tempValue.substring(whenIndex + 6, endIndex) + " " + timezone);
+			}
+		}
+
+		private boolean isRecurringEvent(String tempValue) {
+            return tempValue.contains(Constants.RECURRING_EVENT);
+		}
+
+		public void characters(char ch[], int start, int length) throws SAXException {
         	tempValue += new String(ch, start, length);
         }
 
 	};
 	
-	public Location getEventsAtLocation(String link) {
+	public Location getEventsAtLocation(String link) 
+			throws MalformedURLException, 
+			ParserConfigurationException, SAXException {
 		events = new ArrayList<Event>();
 		location = new Location();
 		
-		try {				
+					
 			URL url = new URL(link);
-			url.openConnection();
-			InputStream reader = url.openStream();
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			SAXParser sp = spf.newSAXParser();
-            sp.parse(reader, handler);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				url.openConnection();			
+			    InputStream reader;
+				reader = url.openStream();
+				SAXParserFactory spf = SAXParserFactory.newInstance();
+				SAXParser sp = spf.newSAXParser();
+	            sp.parse(reader, handler);
+			}catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
 		      				
 		location.setEventList(events);
 		return location;

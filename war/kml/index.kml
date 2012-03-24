@@ -130,7 +130,7 @@
                         kmlObj.render();
                     }
                     else if (kmlObj.type == "placemark")
-                    {
+                    {  
                         kmlObj.balloonVisibility = focus;
                         kmlObj.render();
                    }
@@ -282,7 +282,7 @@
 						locationArray[index][0] = pmName;
 						locationArray[index][1] = outputData;
 
-						var divID = "div" + index
+						var divID = "div" + index;
 
 						var myPlacemarkJSON =	
 						{   

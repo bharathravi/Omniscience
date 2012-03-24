@@ -22,21 +22,13 @@ public class OmniscienceServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
-		// LocationList = CalendarService.getLocationList()
-		// KMLGenerator.generate(LocationList)
-		// KML generator does the following: given a list of locations an events at that place, generates a kml
-		// 
-		/*PersistenceManager pm = PMF.get().getPersistenceManager();
-		Calendar cal = new Calendar("My Public calendar", "33.78840",   
-				"-84.40509", "0", "A Random public calendar with events and stuff",
-				"https://www.google.com/calendar/feeds/bphu9dv3g9vb2aku7e7jlqesfg%40group.calendar.google.com/public/basic");
-		try {
-            pm.makePersistent(cal);
-        } finally {
-            pm.close();
-        }*/
-		CalendarService calServ = new CalendarService();
-		List<Location> locations = calServ.getLocationCalendars();
+		double myLat = Double.parseDouble(req.getParameter("lat"));
+		double myLng = Double.parseDouble(req.getParameter("lng"));
+		double myAlt = Double.parseDouble(req.getParameter("alt"));
+		double dist = Double.parseDouble(req.getParameter("dist"));
+		
+		CalendarServiceImpl calServ = new CalendarServiceImpl();
+		List<Location> locations = calServ.getLocationCalendars(myLat, myLng, myAlt, dist);
 		JSONGenerator jsonGen = new JSONGenerator();
 		
 		resp.setContentType("application/json");

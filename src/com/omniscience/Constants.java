@@ -17,4 +17,5 @@ public class Constants {
   public static String ENTRY = "entry";
   public static String SUMMARY = "summary";
   public static String SUBTITLE = "subtitle";
+  public static String RECURRING_EVENT = "Recurring Event";
 }
