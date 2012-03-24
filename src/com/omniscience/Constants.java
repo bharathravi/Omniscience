@@ -18,4 +18,8 @@ public class Constants {
   public static String SUMMARY = "summary";
   public static String SUBTITLE = "subtitle";
   public static String RECURRING_EVENT = "Recurring Event";
+  
+  // Static web pages
+  public static String MAIN_PAGE = "/jsp/main.jsp";
+  public static String EDIT_PAGE = "/jsp/edit.jsp";
 }
