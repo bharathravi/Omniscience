@@ -26,9 +26,10 @@ public class OmniscienceServlet extends HttpServlet {
 		double myLng = Double.parseDouble(req.getParameter("lng"));
 		double myAlt = Double.parseDouble(req.getParameter("alt"));
 		double dist = Double.parseDouble(req.getParameter("dist"));
+		int days = Integer.parseInt(req.getParameter("days"));
 		
 		CalendarServiceImpl calServ = new CalendarServiceImpl();
-		List<Location> locations = calServ.getLocationCalendars(myLat, myLng, myAlt, dist);
+		List<Location> locations = calServ.getLocationCalendars(myLat, myLng, myAlt, dist, days);
 		JSONGenerator jsonGen = new JSONGenerator();
 		
 		resp.setContentType("application/json");

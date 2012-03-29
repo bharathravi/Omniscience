@@ -60,7 +60,7 @@
 				  var myLon = myLoc.longitude;
 				  var myAlt = myLoc.altitude;				  				 
 				  
-				  actualUrl = url + "?lat=" + myLat + "&lng=" + myLon + "&alt=" + myAlt + "&dist=5";				  
+				  actualUrl = url + "?lat=" + myLat + "&lng=" + myLon + "&alt=" + myAlt + "&dist=5&days=7";				  
 				  
 				  $.getJSON(actualUrl,function(json) {				
 				    locationArray = new Array(json.results.length);
@@ -81,12 +81,12 @@
                         eventIndex = eventIndex + 1;                      
                       });
                     
-                      var divID = "div" + index;
+                      var divID = index;
                       var previewText = "<b>" + location.events[0].title + "</b><br> at " + location.name;
 					
 					  var myPlacemarkJSON =	
 						{   
-							description : "<div id='" + index +"' class='placemarkStyle' onclick='showDetails(" + index + ")'><img src='http://omniscience-app.appspot.com/images/Google-Calendar-128.png' width='95' height='95' />" + previewText + "</div>",
+							description : "<div id='" + divID +"' class='placemarkStyle' onclick='showDetails(" + index + ")'><img src='http://omniscience-app.appspot.com/images/Google-Calendar-128.png' width='95' height='95' />" + previewText + "</div>",
 							iconVisibility : "0",
 							id : "PM" + index,
 							labelVisibility : "0",
@@ -112,23 +112,11 @@
 											 }]
 							
 						};
-                      var myPlacemark = new KMLPlacemark(myPlacemarkJSON);				
-                      
+                      var myPlacemark = new KMLPlacemark(myPlacemarkJSON);				                     
                       index = index + 1;									            				                                                                        				    			   		
 				    });
 				  				                       			  				  
 				    hideSpinner();
-				    
-				    for (kmlObjId in KHARMA.dom.elements)
-                	{
-                    	var kmlObj = KHARMA.dom.elements[kmlObjId];
-                    	if (kmlObj.type == "placemark")
-                    	{  
-                        	alert("hi");
-                        	
-                        	kmlObj.render();
-                   		}
-                	}				  
 				  });								
 				}
 				

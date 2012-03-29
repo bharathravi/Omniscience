@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,6 +33,7 @@ public class XMLParser {
 	private Location location;
 	private DefaultHandler handler = new DefaultHandler() {		
 		private boolean inEvent = false;
+		private boolean inOriginalEvent = false;
 		private Event event;
 		private String tempValue;	
 		
@@ -39,7 +43,28 @@ public class XMLParser {
              	if (qName.equalsIgnoreCase(Constants.ENTRY)) {
             		inEvent = true;
             		event = new Event();            		
-            	}              	             
+            	} else if (qName.equalsIgnoreCase(Constants.GD_ORIGINAL_EVENT)) {
+            		inOriginalEvent = true;            		            	
+            	} else if (qName.equalsIgnoreCase(Constants.GD_WHEN) && inEvent && !inOriginalEvent) {
+            	  SimpleDateFormat rfcFormat = new SimpleDateFormat("yyyy-mm-DD'T'hh:mm:ss.SSSZ");            	 
+            	  String startTime = attributes.getValue(Constants.START_TIME);
+            	  String endTime = attributes.getValue(Constants.END_TIME);
+            	  try {
+					Date date = rfcFormat.parse(startTime.replaceAll("([\\+\\-]\\d\\d):(\\d\\d)","$1$2"));
+					startTime = DateFormat.getDateTimeInstance(
+				            DateFormat.LONG, DateFormat.LONG).format(date);
+				
+					date = rfcFormat.parse(endTime.replaceAll("([\\+\\-]\\d\\d):(\\d\\d)","$1$2"));
+					endTime = DateFormat.getDateTimeInstance(
+				            DateFormat.LONG, DateFormat.LONG).format(date);
+				            	    
+            	    event.setWhen(startTime + " to " + endTime);
+            	    System.out.println("set");
+            	  } catch (ParseException e) {
+  					// TODO Auto-generated catch block
+  					e.printStackTrace();
+  				}
+            	}            	              	            
         }
 
         public void endElement(String uri, String localName,
@@ -53,17 +78,18 @@ public class XMLParser {
         		} else {
         			location.setName(tempValue);
         		}
-        	} else if (qName.equalsIgnoreCase(Constants.SUMMARY)) {
+        	} else if (qName.equalsIgnoreCase(Constants.CONTENT)) {
         		if (inEvent) {
-        			parseSummary(tempValue, event);
+        			//parseSummary(tempValue, event);
         			event.setSummary(tempValue);
         		}
         	} else if (qName.equalsIgnoreCase(Constants.SUBTITLE)) {
         		if (!inEvent) {
         			location.setDescription(tempValue);
         		}
+        	} else if (qName.equalsIgnoreCase(Constants.GD_ORIGINAL_EVENT)) {
+        		inOriginalEvent = false;            		            	
         	}
-        	
         }
 
         private void parseSummary(String tempValue, Event event) {			
