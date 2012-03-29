@@ -27,9 +27,9 @@ public class Constants {
   public static String END_TIME = "endTime";
   public static String SUBTITLE = "subtitle";
   public static String RECURRING_EVENT = "Recurring Event";
-  public static String URL_PARAMETERS = "?orderby=starttime&singleevents=true&sortorder=ascending&futureevents=true";
-  public static String URL_RECURRENCE_EXPANSION_START = "recurrence-expansion-start";
-  public static String URL_RECURRENCE_EXPANSION_END = "recurrence-expansion-end";
+  public static String URL_PARAMETERS = "?orderby=starttime&singleevents=true&sortorder=ascending";
+  public static String URL_START_MIN = "start-min";
+  public static String URL_START_END = "start-max";
   
   // Static web pages
   public static String MAIN_PAGE = "/jsp/main.jsp";

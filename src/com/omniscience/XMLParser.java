@@ -58,8 +58,7 @@ public class XMLParser {
 					endTime = DateFormat.getDateTimeInstance(
 				            DateFormat.LONG, DateFormat.LONG).format(date);
 				            	    
-            	    event.setWhen(startTime + " to " + endTime);
-            	    System.out.println("set");
+            	    event.setWhen(startTime + " to " + endTime);            	    
             	  } catch (ParseException e) {
   					// TODO Auto-generated catch block
   					e.printStackTrace();
