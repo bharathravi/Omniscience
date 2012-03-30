@@ -60,7 +60,7 @@
 				  var myLon = myLoc.longitude;
 				  var myAlt = myLoc.altitude;				  				 
 				  
-				  actualUrl = url + "?lat=" + myLat + "&lng=" + myLon + "&alt=" + myAlt + "&dist=5&days=7";				  
+				  actualUrl = url + "?lat=" + myLat + "&lng=" + myLon + "&alt=" + myAlt + "&dist=5&days=10";				  
 				  
 				  $.getJSON(actualUrl,function(json) {				
 				    locationArray = new Array(json.results.length);
