@@ -202,8 +202,11 @@ public class Omniscience implements EntryPoint {
 		listDescription.getElement().getStyle().setFontWeight(FontWeight.BOLD);		
 		calendarListPanel.add(listDescription);
 		calendarListPanel.add(tableMessageLabel);		
+		calendarsTable.getColumnFormatter().addStyleName(0, "calendarsTableCalName");
 		calendarListPanel.add(calendarsTable);
 		calendarListPanel.setStyleName("calendarListPanel");
+		
+		
 		
 		contentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		contentPanel.setStyleName("contentPanel");
@@ -286,8 +289,7 @@ public class Omniscience implements EntryPoint {
 		heading.setStyleName("subheader");
 		
 		HTML description = new HTML();
-		description.setText("Omniscience is a virtual reality event discovery service that" +
-				"does a lot of interesting things and...");
+		description.setHTML(Constants.ABOUT);
 		
 		aboutPanel.add(heading);
 		aboutPanel.add(description);
@@ -328,7 +330,7 @@ public class Omniscience implements EntryPoint {
 		tableMessageLabel.setText("Refreshing Table...");		
 		
 		// TODO set "refreshing"  icon
-		calendarsTable.removeAllRows();		
+		calendarsTable.removeAllRows();				
 	//	calendarsTable.setText(0, 0, "Calendar Name");
 	//	calendarsTable.setText(0, 1, "Edit");
 	//	calendarsTable.setText(0, 2, "Remove");	
@@ -349,16 +351,18 @@ public class Omniscience implements EntryPoint {
 						
 						for(final SerializableCalendar cal : result) {
 							final int row = calendarsTable.getRowCount();
-							calendarsTable.setWidget(row, 0, new CalendarWidget(cal));
+							final CalendarWidget calWidget = new CalendarWidget(cal);
+							calendarsTable.setWidget(row, 0, calWidget);
 							
 							Anchor editLink = new Anchor("Edit");
 							calendarsTable.setWidget(row, 1, editLink);
+							calendarsTable.getRowFormatter().setStyleName(row, "calendarsTableRow");
 							editLink.addClickHandler(new ClickHandler() {								
 								@Override
 								public void onClick(ClickEvent event) {
 									EditCalendarDialog dialog = 
 											new EditCalendarDialog(cal, editCalendarService, me);
-									dialog.center();									
+									dialog.showRelativeTo(calWidget);									
 								}
 							});
 							

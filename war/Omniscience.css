@@ -92,17 +92,21 @@ h2 {
   box-shadow: 5px 5px 4px #999;
 }
 
-.calendarsTableHeader {
-  background-color: #2062B8;
-  color: black;
-  font-style: italic;
+.calendarsTableCalName {
+  width: 100%;
 }
 
 .calendarsTable {
+  width: 80%;	
   border: 1px solid silver;
   color: black;
   padding: 10px;
   margin-bottom:6px;
+}
+
+.calendarsTableRow td {
+  padding: 5px;	
+  border-bottom:1px solid silver;
 }
 
 .addCalendarForm {

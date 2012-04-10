@@ -37,4 +37,12 @@ public class Constants {
   // Static web pages
   public static String MAIN_PAGE = "/jsp/main.jsp";
   public static String EDIT_PAGE = "/jsp/edit.jsp";
+public static String ABOUT = "Omniscience allows you to discover what events are happening at a place" +
+		"by simply looking in its direction! " +
+		"Simply use your phone to look in the direction of a location to know what fun events" +
+		"you can join in there.<br><br>" +
+		"<i>In a new place?</i> Look around to check out what's happening!<br><br>" +
+		"<i>In the middle of a busy mall?</i> Gaze discounts and offers around you by just turning around!<br><br>" +
+		"<i>Want to see if your friends are free for a visit?</i> Simply look in the direction of their home to see how busy their schedule is!<br><br>" +
+		"<br>Use Omniscience to stay up to date to the world around you!";
 }
