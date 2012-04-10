@@ -1,0 +1,2 @@
+serviceClass: com.omniscience.client.EditCalendarService
+path: 9A64C9B518EEE4EF1994C2F885F6EDC3.gwt.rpc

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+
+	<name>Omniscience</name>
+	<Style id="documentStyle">
+		<IconStyle>
+			<Icon>
+				<href>http://argonapps.gatech.edu/search/images/icon_google.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	
+	
+	<Style id="overlayStyle"> <!-- style for ScreenOverlay -->
+		<BalloonStyle>
+			<displayMode>undecorated</displayMode>
+		</BalloonStyle>
+	</Style>
+	
+	<Style id="placemarkStyle"> <!-- style for placemarkers -->
+		<BalloonStyle>
+			<displayMode>undecorated</displayMode>
+		</BalloonStyle>		
+	</Style>
+	
+	
+	<ScreenOverlay id="main_overlay">
+		<description><![CDATA[
+        		
+			<script type="text/javascript">
+			  var url = 'http://omniscience-app.appspot.com/omniscience';	
+			  var locationArray = new Array();  
+			  var dockVisible = false;
+			  var selectedPlacemarkIndex = -1;
+				
+              function main_overlay_init() {					                												
+				motherOfAllOverlays = document.getElementById("main_overlay").parentNode;
+				motherOfAllOverlays.style.position = "fixed";
+				headTag= document.getElementsByTagName('head')[0];
+				linktag = document.createElement("link");
+				linktag.setAttribute("rel", "stylesheet");
+				linktag.setAttribute("type", "text/css");
+				linktag.setAttribute("href", "http://omniscience-app.appspot.com/css/omniscience.css");
+				headTag.appendChild(linktag);			
+				
+				metaTag = document.createElement("meta");
+				metaTag.setAttribute("name", "format-detection");
+				metaTag.setAttribute("content", "telephone=no");
+				headTag.appendChild(metaTag);				
+				getLocationEvents();						        																			
+			  }     
+				
+				function getLocationEvents() {																				
+                  var index = 0;                  
+				  showSpinner();		  				  
+				  
+				  var myLoc = KHARMA.getLocation();																		
+				  var myLat = myLoc.latitude;
+				  var myLon = myLoc.longitude;
+				  var myAlt = myLoc.altitude;				  				 
+				  
+				  actualUrl = url + "?lat=" + myLat + "&lng=" + myLon + "&alt=" + myAlt + "&dist=5&days=10";				  
+				  
+				  $.getJSON(actualUrl,function(json) {				
+				    locationArray = new Array(json.results.length);
+				    $.each(json.results,function(i,location) {
+				      var eventDescription = "";				  	 				                  
+				  	  if(location.events.length <= 0) {
+				  	    return;
+				  	  }
+				  	  
+				      locationArray[index] = new Array(2);
+				      locationArray[index][1] = new Array(location.events.length);
+                      locationArray[index][0] = location.name;				  	                       
+				  	                       
+                      var eventIndex = 0;				  	                         
+                      $.each(location.events,function(i,event) {
+                        eventDescription = "<b><i>" + event.title + "</i></b><br>" + event.when + "<br><br>";
+                        locationArray[index][1][eventIndex] = eventDescription;
+                        eventIndex = eventIndex + 1;                      
+                      });
+                    
+                      var divID = index;
+                      var previewText = "<b>" + location.events[0].title + "</b><br> at " + location.name;
+					
+					  var myPlacemarkJSON =	
+						{   
+							description : "<div id='" + divID +"' class='placemarkStyle' onclick='showDetails(" + index + ")'><img src='http://omniscience-app.appspot.com/images/Google-Calendar-128.png' width='95' height='95' />" + previewText + "</div>",
+							iconVisibility : "0",
+							id : "PM" + index,
+							labelVisibility : "0",
+							name : "Omniscience",
+							type : "placemark",
+							visibility : "1",
+							balloonVisibility : "1",
+							styleUrl : "#placemarkStyle",
+							geometry :      [{ 
+											 id : "GEO" + index,
+											 type : "balloon",
+											 scaleFactor: "0.80",
+											 scaleMode: "relative",
+											 orientationMode: "billboard",
+											 location : 
+											 {    
+												 id : "LOC" + index,
+												 type : "location",
+												 latitude : location.lat,
+												 longitude : location.lng,
+												 altitude : location.alt,
+											 }
+											 }]
+							
+						};
+                      var myPlacemark = new KMLPlacemark(myPlacemarkJSON);				                     
+                      index = index + 1;									            				                                                                        				    			   		
+				    });
+				  				                       			  				  
+				    hideSpinner();
+				  });								
+				}
+				
+						
+				function showSpinner() {				  
+				  document.getElementById("searchSpinner").style.visibility = "visible";
+				  document.getElementById("searchSpinner").style.opacity = "1";				
+				}
+				
+				function hideSpinner() {				 
+				  document.getElementById("searchSpinner").style.visibility = "hidden";
+				  document.getElementById("searchSpinner").style.opacity = "0";				
+				}           
+				
+				function showDetails(placemarkIndex) {
+				  markAsVisited(selectedPlacemarkIndex);
+				  selectedPlacemarkIndex = placemarkIndex;
+				  markAsCurrent(selectedPlacemarkIndex);                  
+                  detailsText = "<b>" + locationArray[placemarkIndex][0] + " Events </b><br><br>";
+                  $.each(locationArray[placemarkIndex][1],function(i,event) {
+                      detailsText += event + "<br>";
+                  });
+                                    
+				  document.getElementById("detailsTextDiv").innerHTML = detailsText;				
+				  if(!dockVisible) {				    
+					showData();
+				  }
+			    }
+			    
+			    function markAsVisited(placemarkIndex) {
+			   	  if(placemarkIndex > -1)
+				  {
+					var placemarkId = placemarkIndex;
+					
+					document.getElementById(placemarkId).style.color = "#000000";
+					document.getElementById(placemarkId).style.backgroundColor = "#FFF1B9";
+					document.getElementById(placemarkId).style.borderColor = "#FFB442";
+				  }
+			    }
+			
+			   function markAsCurrent(placemarkIndex)
+			   {
+				 if(placemarkIndex > -1)
+				 {
+					var placemarkId = placemarkIndex;
+					document.getElementById(placemarkId).style.color = "#000000";
+					document.getElementById(placemarkId).style.backgroundColor = "#FFCC00";
+					document.getElementById(placemarkId).style.borderColor = "#CC7A00";
+				 }
+			   }	
+			    
+			    function hideData() {
+				  if(dockVisible) {
+					document.getElementById("detailsDiv").style.webkitAnimationName = "moveDown";
+					dockVisible = false;
+				  }
+				markAsVisited(selectedPlacemarkIndex);
+				selectedPlacemarkIndex = -1;
+			    }
+			
+			    function showData()  {
+				  if(!dockVisible) {				  				  
+					document.getElementById("detailsDiv").style.webkitAnimationName = "moveUp";
+					dockVisible = true;
+					
+				  }
+			    }
+			
+			    function activateDownButton()  {
+				  setTimeout("deactivateDownButton()", 200);
+				  hideData();
+			    }
+			     
+			    function deactivateDownButton() {
+				  $("#downDiv").css("background-image", "url(http://argonapps.gatech.edu/search/images/down.png)"); 
+			    }
+			</script> 
+			
+		<div id="mainWrapper" height:100%; width:100%">																			
+		  <div id="searchSpinner"></div>
+          <div id="detailsDiv">
+            <div id="dockLeftDiv"></div>
+			<div id="dockRightDiv"></div>
+		    <div id="downDiv" onclick="activateDownButton();"></div>
+            <div id="detailsTextDiv"></div>
+		  </div>
+		</div>
+			
+						
+		]]></description>
+			
+
+		<overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/> 
+		<screenXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+		<size x="0" y="0" xunits="pixels" yunits="pixels"/>
+		
+		<styleUrl>#overlayStyle</styleUrl>  	
+	</ScreenOverlay>
+			
+	<styleUrl>#documentStyle</styleUrl> 
+	
+	<!-- KML document description -->
+	<Snippet>Testing Stuff Out</Snippet>
+	<description>
+		<![CDATA[
+		<p> Nothing to see here, move along.		
+		]]>
+	</description>
+	
+</Document>
+</kml>

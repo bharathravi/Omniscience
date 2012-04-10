@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>KMLGenerator</servlet-name>
+    <servlet-class>com.omniscience.server.KMLJsonGenerator</servlet-class>
+  </servlet>
+  
+  
+  <servlet>
+    <servlet-name>addCalendarServlet</servlet-name>
+    <servlet-class>com.omniscience.server.AddCalendarServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>deleteCalendarServlet</servlet-name>
+    <servlet-class>com.omniscience.server.DeleteCalendarServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>editCalendarServlet</servlet-name>
+    <servlet-class>com.omniscience.server.EditCalendarServiceImpl</servlet-class>
+  </servlet>
+  
+  
+  <servlet>
+    <servlet-name>getCalendarsServlet</servlet-name>
+    <servlet-class>com.omniscience.server.GetCalendarsServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>authenticationServlet</servlet-name>
+    <servlet-class>com.omniscience.server.AuthenticationServiceImpl</servlet-class>
+  </servlet>
+    
+  
+  <servlet-mapping>
+    <servlet-name>KMLGenerator</servlet-name>
+    <url-pattern>/getKML</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>addCalendarServlet</servlet-name>
+    <url-pattern>/omniscience/addCalendar</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>editCalendarServlet</servlet-name>
+    <url-pattern>/omniscience/editCalendar</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet-mapping>
+    <servlet-name>deleteCalendarServlet</servlet-name>
+    <url-pattern>/omniscience/deleteCalendar</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet-mapping>
+    <servlet-name>getCalendarsServlet</servlet-name>
+    <url-pattern>/omniscience/getCalendars</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>authenticationServlet</servlet-name>
+    <url-pattern>/omniscience/auth</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>Omniscience.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

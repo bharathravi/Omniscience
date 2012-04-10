@@ -1,0 +1,279 @@
+
+/* iPhone portrait */
+@media screen
+{
+
+#inputText
+{
+position: relative;
+}
+
+div.placemarkStyle
+{
+width:700px;
+left:0px;
+top:0px;
+position: absolute;
+
+font-family:sans-serif;
+font-size:22px;
+vertical-align:bottom;
+text-align:left;
+color:rgba(0, 0, 0, 1.0);
+margin:25px;
+padding:25px;
+
+background-color:rgba(255, 255, 255, 1.0);
+border-radius: 40px;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+opacity:1;
+-webkit-transition-property: opacity, background-color; 
+-webkit-transition-duration:0.5s;
+}
+
+#searchDistanceRange
+{
+position: relative;
+}
+
+
+#searchSpinner
+{
+position: relative;
+left:0px;
+top:0px;
+width:40px;
+height:40px;
+
+background-image:url('http://argonapps.gatech.edu/search/images/spinnerImg.png');
+background-size:100%;
+
+visibility:visible;
+
+-webkit-animation-name: rotateSpinner;
+-webkit-animation-duration:2s;
+-webkit-animation-iteration-count:infinite;
+-webkit-animation-timing-function:linear;
+
+opacity:1;
+-webkit-transition: opacity 0.5s ease;
+}
+
+#detailsDiv
+{
+width:285px;
+height:330px;
+left:35px;
+bottom:-360px;
+position: absolute;
+
+-webkit-transition: -webkit-transform 0.5s ease;
+-webkit-backface-visibility: hidden;
+
+-webkit-animation-duration: 0.5s;
+-webkit-animation-iteration-count: 1;
+-webkit-animation-timing-function: ease;
+-webkit-animation-fill-mode: forwards;
+}
+
+#dockLeftDiv{
+position: absolute;
+left:0px;
+top:0px;
+width:246px;
+height:330px;
+
+border-top:solid #000000 1px;
+border-left:solid #000000 1px;
+border-top-left-radius: 6px;
+
+background-color:rgba(255, 255, 255, 0.7);
+}
+
+#dockRightDiv{
+position: absolute;
+left:247px;
+top:0px;
+width:38px;
+height:330px;
+
+background-color:rgba(255, 255, 255, 0.7);
+}
+
+
+#downDiv
+{
+position: absolute;
+width:40px;
+height:30px;
+right:-1px;
+top:-30px;
+background-image:url('http://argonapps.gatech.edu/search/images/down.png');
+}
+
+#detailsTextDiv
+{
+width:265px;
+height:300px;
+left:0px;
+top:0px;
+position: absolute;
+overflow:auto;
+
+font-family:sans-serif;
+font-size:9px;
+vertical-align:bottom;
+text-align:left;
+color:rgba(0, 0, 0, 1);
+
+padding:10px;
+}
+
+
+@-webkit-keyframes moveUp {
+from {
+bottom:-360px;
+}
+to {
+bottom:0px;
+}
+}
+
+@-webkit-keyframes moveDown {
+from {
+bottom:0px;
+}
+to {
+bottom:-360px;
+}
+}
+
+@-webkit-keyframes rotateSpinner {
+  from {-webkit-transform:rotate(0deg);}
+  to {-webkit-transform:rotate(360deg);}
+} 
+
+}
+
+
+@media screen and (max-device-width: 480px) and (orientation: landscape) 
+{
+
+#detailsDiv
+{
+width:445px;
+height:210px;
+left:35px;
+bottom:-260px;
+position: absolute;
+
+
+-webkit-transition: -webkit-transform 0.5s ease;
+-webkit-backface-visibility: hidden;
+
+-webkit-animation-duration: 0.5s;
+-webkit-animation-iteration-count: 1;
+-webkit-animation-timing-function: ease;
+-webkit-animation-fill-mode: forwards;
+}
+
+#dockLeftDiv{
+position: absolute;
+left:0px;
+top:0px;
+width:406px;
+height:210px;
+
+border-top:solid #000000 1px;
+border-left:solid #000000 1px;
+border-top-left-radius: 6px;
+
+background-color:rgba(255, 255, 255, 0.7);
+}
+
+#dockRightDiv{
+position: absolute;
+left:407px;
+top:0px;
+width:38px;
+height:210px;
+
+background-color:rgba(255, 255, 255, 0.7);
+}
+
+
+
+#downDiv
+{
+position: absolute;
+width:40px;
+height:30px;
+right:-1px;
+top:-30px;
+background-image:url('http://argonapps.gatech.edu/search/images/down.png');
+}
+
+
+#detailsTextDiv
+{
+width:425px;
+height:180px;
+left:0px;
+top:0px;
+position: absolute;
+overflow:auto;
+
+font-family:sans-serif;
+font-size:9px;
+vertical-align:bottom;
+text-align:left;
+color:rgba(0, 0, 0, 1);
+
+padding:10px;
+}
+
+div.placemarkStyle
+{
+width:700px;
+left:0px;
+top:0px;
+position: absolute;
+
+font-family:sans-serif;
+font-size:22px;
+vertical-align:bottom;
+text-align:left;
+color:rgba(0, 0, 0, 1.0);
+margin:25px;
+padding:25px;
+
+background-color:rgba(255, 255, 255, 1.0);
+border-radius: 40px;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+opacity:1;
+-webkit-transition-property: opacity, background-color; 
+-webkit-transition-duration:0.5s;
+}
+
+
+@-webkit-keyframes moveUp {
+from {
+bottom:-360px;
+}
+to {
+bottom:0px;
+}
+}
+
+@-webkit-keyframes moveDown {
+from {
+bottom:0px;
+}
+to {
+bottom:-360px;
+}
+}
+
+}

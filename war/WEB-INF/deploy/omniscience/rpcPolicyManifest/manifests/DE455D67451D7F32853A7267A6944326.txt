@@ -1,0 +1,2 @@
+serviceClass: com.omniscience.client.AuthenticationService
+path: D7770070FE5040018950E51838E87022.gwt.rpc
