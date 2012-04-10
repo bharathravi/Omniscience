@@ -47,13 +47,13 @@ GetCalendarsService {
 			query.setFilter("owner == ownerParam");
 			query.declareParameters("String ownerParam");
 			List<Calendar> calendars = (List<Calendar>) query.execute(user.getUserId());
-			System.out.println("Num calendars:" + calendars.size());
+			
 			
 			List<SerializableCalendar> sCalendars = new ArrayList<SerializableCalendar>();
 			for (Calendar c : calendars) {
 				sCalendars.add(new SerializableCalendar(c));
 			}
-			System.out.println("Num scalendars:" + sCalendars.size());
+			
 			return sCalendars;
 	}
 	}

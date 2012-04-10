@@ -3,11 +3,117 @@
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
-  font-size: 2em;
+  font-size: 4em;
   font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
+  color: black;
+  margin: 50px 0px 10px;
   text-align: center;
+  text-shadow: 5px 5px 4px #999
+}
+
+h2 {
+  font-size: 20;
+  font-weight: bold;
+  color: black;
+  margin: 10px 0px 10px;
+  text-align: center;
+  font-style: italic;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.body {
+  background-color: white;
+}
+
+.addCalendarForm {
+	color: black;
+}
+
+.subheader {  
+  font-weight: bold;   
+  font-style: italic;
+  padding: 10px;  
+  color: black;
+}
+
+.statusBarPanel {
+	align: right;
+	padding: 10px;
+}
+
+.contentPanel {
+	padding: 10px;
+	align: right;
+}
+
+.addCalendarPanel {
+	width: 90%;
+	min-height:200px;
+     height:auto;
+ 	padding: 5px; 
+	align: center;
+	background-color: rgba(0,0,255,0.2);
+  margin: 40px 30px 40px;
+  border-radius: 10px;
+  
+  -moz-box-shadow: 5px 5px 4px #999;
+  -webkit-box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #999;
+}
+
+.aboutPanel {
+	width: 90%;
+	 min-height:200px;
+     height:auto; 
+ 	padding: 5px 5px 15px; 
+	align: center;
+	background-color: rgba(0,0,255,0.2);
+  margin: 40px 30px 40px;
+  border-radius: 10px;
+  
+  -moz-box-shadow: 5px 5px 4px #999;
+  -webkit-box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #999;
+}
+
+
+.calendarListPanel {
+	width: 90%;
+	min-height:200px;
+     height:auto;     
+	padding: 5px;
+	align: center;
+	background-color: rgba(0,0,255,0.2);
+  margin: 40px 30px 40px;
+  border-radius: 10px;
+  
+  -moz-box-shadow: 5px 5px 4px #999;
+  -webkit-box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #999;
+}
+
+.calendarsTableHeader {
+  background-color: #2062B8;
+  color: black;
+  font-style: italic;
+}
+
+.calendarsTable {
+  border: 1px solid silver;
+  color: black;
+  padding: 10px;
+  margin-bottom:6px;
+}
+
+.addCalendarForm {
+	color: black;
+	padding: g10px;
+}
+
+.mainPanel {	
+  align: right;
+  width: 100%;  
+     
 }
 
 .sendButton {
@@ -17,28 +123,42 @@ h1 {
 
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
+  align: center;  
   width: 400px;
+  -moz-box-shadow: 5px 5px 4px #ccc;
+  -webkit-box-shadow: 5px 5px 4px #ccc;
+  box-shadow: 5px 5px 4px #ccc;  
 }
 
 .dialogVPanel {
   margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
+  background-color: rgba(0,0,0,0.2);  
 }
 
 .errorLabel {
   color: red;
+  padding: 5px;
 }
 
 .successLabel {
   color: green;
+  padding: 5px;
 }
 
 .normalLabel {
   color: black;
+  padding: 5px;
 }
+
+.username {
+  font-style: italic;
+  color: black;
+  padding: 5px;
+}
+
+.logoutLink {	
+	padding: 0px 30px;
+}	
 
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {

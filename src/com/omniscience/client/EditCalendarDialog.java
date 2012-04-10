@@ -76,6 +76,7 @@ public class EditCalendarDialog extends DialogBox {
 		dialogVPanel.add(messageLabel);
 		dialogVPanel.add(editCalendarForm);
 		dialogBox.setWidget(dialogVPanel);
+		dialogBox.setModal(true);
 	}
 	
 	private void createEditCalendarForm(SerializableCalendar cal) {

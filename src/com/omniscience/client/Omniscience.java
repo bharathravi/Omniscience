@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -55,6 +56,7 @@ public class Omniscience implements EntryPoint {
 	private HorizontalPanel contentPanel = new HorizontalPanel();
     private VerticalPanel addCalendarPanel = new VerticalPanel();
     private VerticalPanel calendarListPanel = new VerticalPanel();
+    private VerticalPanel aboutPanel = new VerticalPanel();
 	private FlexTable calendarsTable = new FlexTable();
 	private FlexTable addCalendarForm = new FlexTable();
 	//private VerticalPanel listPanel = new VerticalPanel();
@@ -147,30 +149,82 @@ public class Omniscience implements EntryPoint {
 		RootPanel.get("calendarList").clear();
 		RootPanel.get("calendarList").add(globalMessageLabel);
 		globalMessageLabel.setText("");
-		statusBarPanel.add(new Label("Hello " + username + "!"));
-		statusBarPanel.add(new Anchor("Logout", logoutUrl));
+		
+		statusBarPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		statusBarPanel.setStyleName("statusBarPanel");
+		
+		Anchor usernameLabel = new Anchor(username);		
+		usernameLabel.setStyleName("logoutLink");
+		usernameLabel.addClickHandler(new ClickHandler() {			
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.open("https://accounts.google.com", "", "");				
+			}
+		});
+		statusBarPanel.add(usernameLabel);
 				
+		Anchor googleCalendarLink = new Anchor("Google Calendar");
+		googleCalendarLink.addClickHandler(new ClickHandler() {			
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.open("https://calendar.google.com", "", "");				
+			}
+		});
+		googleCalendarLink.setStyleName("logoutLink");
+		statusBarPanel.add(googleCalendarLink);
+		
+		Anchor googleMapsLink = new Anchor("Google Maps");
+		googleMapsLink.addClickHandler(new ClickHandler() {			
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.open("https://maps.google.com", "", "");				
+			}
+		});
+		googleMapsLink.setStyleName("logoutLink");
+		statusBarPanel.add(googleMapsLink);
+					
+		Anchor logoutLink = new Anchor("Logout", logoutUrl);
+		logoutLink.setStyleName("logoutLink");
+		statusBarPanel.add(logoutLink);						
 		createAddCalendarForm();
-
+		createAboutPage(aboutPanel);
+		
 		Label addDescription = new Label("Add a new calendar:");
-		addDescription.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+		addDescription.setStyleName("subheader");
+		addDescription.getElement().getStyle().setFontWeight(FontWeight.BOLD);		
 		addCalendarPanel.add(addDescription);
 		addCalendarPanel.add(addCalendarMessageLabel);
 		addCalendarPanel.add(addCalendarForm);
+		addCalendarPanel.setStyleName("addCalendarPanel");
 		
 		Label listDescription = new Label("Your calendars:");
-		listDescription.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+		listDescription.setStyleName("subheader");
+		listDescription.getElement().getStyle().setFontWeight(FontWeight.BOLD);		
 		calendarListPanel.add(listDescription);
 		calendarListPanel.add(tableMessageLabel);		
 		calendarListPanel.add(calendarsTable);
+		calendarListPanel.setStyleName("calendarListPanel");
 		
+		contentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		contentPanel.setStyleName("contentPanel");
+		contentPanel.setWidth("100%");
+		
+		contentPanel.add(aboutPanel);
 		contentPanel.add(addCalendarPanel);
 		contentPanel.add(calendarListPanel);
-		
+		contentPanel.setCellWidth(aboutPanel, "30%");
+		contentPanel.setCellWidth(addCalendarPanel, "30%");
+		contentPanel.setCellWidth(calendarListPanel, "30%");
+		mainPanel.setStyleName("mainPanel");
+		mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainPanel.add(statusBarPanel);
 		mainPanel.add(contentPanel);
 		
+		
 		RootPanel.get("calendarList").add(mainPanel);
+		
+		//alendarsTable.getRowFormatter().addStyleName(0, "calendarsTableHeader");
+		calendarsTable.setStyleName("calendarsTable");
 		
 		// Create a handler for the sendButton and nameField
 		class AddCalendarButtonHandler implements ClickHandler {			
@@ -226,7 +280,22 @@ public class Omniscience implements EntryPoint {
 		refreshCalendarList();
 	}
 
+	private void createAboutPage(VerticalPanel aboutPanel) {
+		aboutPanel.setStyleName("aboutPanel");
+		Label heading = new Label("What is Omniscience?");
+		heading.setStyleName("subheader");
+		
+		HTML description = new HTML();
+		description.setText("Omniscience is a virtual reality event discovery service that" +
+				"does a lot of interesting things and...");
+		
+		aboutPanel.add(heading);
+		aboutPanel.add(description);
+		
+	}
+
 	private void createAddCalendarForm() {
+		addCalendarForm.setStyleName("addCalendarForm");
 		addCalendarForm.setText(0, 0, "Calendar URL");
 		addCalendarForm.setWidget(0, 1, newCalendarUrlTextBox);
 		
@@ -260,9 +329,10 @@ public class Omniscience implements EntryPoint {
 		
 		// TODO set "refreshing"  icon
 		calendarsTable.removeAllRows();		
-		calendarsTable.setText(0, 0, "Calendar Name");
-		calendarsTable.setText(0, 1, "Edit");
-		calendarsTable.setText(0, 2, "Remove");														
+	//	calendarsTable.setText(0, 0, "Calendar Name");
+	//	calendarsTable.setText(0, 1, "Edit");
+	//	calendarsTable.setText(0, 2, "Remove");	
+	//	calendarsTable.getRowFormatter().addStyleName(0, "calendarsTableHeader");
 		
 		
 		getCalendarsService.getCalendarsForCurrentUser(
@@ -281,9 +351,9 @@ public class Omniscience implements EntryPoint {
 							final int row = calendarsTable.getRowCount();
 							calendarsTable.setWidget(row, 0, new CalendarWidget(cal));
 							
-							Button editButton = new Button("Edit");
-							calendarsTable.setWidget(row, 1, editButton);
-							editButton.addClickHandler(new ClickHandler() {								
+							Anchor editLink = new Anchor("Edit");
+							calendarsTable.setWidget(row, 1, editLink);
+							editLink.addClickHandler(new ClickHandler() {								
 								@Override
 								public void onClick(ClickEvent event) {
 									EditCalendarDialog dialog = 
@@ -292,12 +362,12 @@ public class Omniscience implements EntryPoint {
 								}
 							});
 							
-							final Button removeButton = new Button("Delete");
-							calendarsTable.setWidget(row, 2, removeButton);
-							removeButton.addClickHandler(new ClickHandler() {
+							final Anchor removeLink = new Anchor("Delete");
+							calendarsTable.setWidget(row, 2, removeLink);
+							removeLink.addClickHandler(new ClickHandler() {
 								@Override
 								public void onClick(ClickEvent event) {
-									removeButton.setEnabled(false);
+									removeLink.setEnabled(false);
 									deleteCalendarService.deleteCalendar(cal.getUrl(), 
 											new AsyncCallback<Void>() {
 
@@ -307,7 +377,7 @@ public class Omniscience implements EntryPoint {
 													tableMessageLabel.setText("Error deleting caledar:" 
 														+ caught.getMessage());
 													tableMessageLabel.setStyleName("errorLabel");
-													removeButton.setEnabled(true);
+													removeLink.setEnabled(true);
 												}
 
 												@Override
@@ -316,7 +386,7 @@ public class Omniscience implements EntryPoint {
 													calendarsTable.removeRow(row);
 													tableMessageLabel.setText("Deleted entry!");
 													tableMessageLabel.setStyleName("successLabel");
-													removeButton.setEnabled(true);
+													removeLink.setEnabled(true);
 												}
 											});
 								}
