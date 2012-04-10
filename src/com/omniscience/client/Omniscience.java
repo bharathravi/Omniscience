@@ -68,9 +68,7 @@ public class Omniscience implements EntryPoint {
 	private Label globalMessageLabel = new Label();
 	private Omniscience me;
 	
-	private Label addCalendarMessageLabel = new Label();
-
-	private List<SerializableCalendar> calendarList = new ArrayList<SerializableCalendar>();
+	private Label addCalendarMessageLabel = new Label();	
 	
 	private class CalendarWidget extends Label {
 		private SerializableCalendar calendar;
@@ -263,6 +261,14 @@ public class Omniscience implements EntryPoint {
 	public void refreshCalendarList() {
 		tableMessageLabel.setText("Refreshing Table...");
 		calendarListPanel.remove(calendarsTable);
+		
+		// TODO set "refreshing"  icon
+		calendarsTable.removeAllRows();		
+		calendarsTable.setText(0, 0, "Calendar Name");
+		calendarsTable.setText(0, 1, "Edit");
+		calendarsTable.setText(0, 2, "Remove");														
+		
+		
 		getCalendarsService.getCalendarsForCurrentUser(
 				new AsyncCallback<List<SerializableCalendar>>() {
 					@Override
@@ -272,21 +278,9 @@ public class Omniscience implements EntryPoint {
 
 					@Override
 					public void onSuccess(List<SerializableCalendar> result) {
-						for (SerializableCalendar cal : result) {
-							if (!calendarList.contains(cal)) {
-								calendarList.add(cal);
-							}
-						}
-						
 						tableMessageLabel.setText("Refreshing Table...");				
 						
-						// TODO set "refreshing"  icon
-						calendarsTable.removeAllRows();		
-						calendarsTable.setText(0, 0, "Calendar Name");
-						calendarsTable.setText(0, 1, "Edit");
-						calendarsTable.setText(0, 2, "Remove");														
-						
-						for(final SerializableCalendar cal : calendarList) {
+						for(final SerializableCalendar cal : result) {
 							final int row = calendarsTable.getRowCount();
 							calendarsTable.setWidget(row, 0, new CalendarWidget(cal));
 							
@@ -321,8 +315,7 @@ public class Omniscience implements EntryPoint {
 
 												@Override
 												public void onSuccess(
-														Void result) {
-													calendarList.remove(cal);
+														Void result) {													
 													calendarsTable.removeRow(row);
 													tableMessageLabel.setText("Deleted entry!");
 													tableMessageLabel.setStyleName("successLabel");
