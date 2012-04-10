@@ -29,7 +29,7 @@
 		<description><![CDATA[
         		
 			<script type="text/javascript">
-			  var url = 'http://omniscience-app.appspot.com/omniscience';	
+			  var url = 'http://omniscience-app.appspot.com/getKML';	
 			  var locationArray = new Array();  
 			  var dockVisible = false;
 			  var selectedPlacemarkIndex = -1;
