@@ -172,11 +172,6 @@ public class Omniscience implements EntryPoint {
 		
 		RootPanel.get("calendarList").add(mainPanel);
 		
-		
-	
-		
-		
-
 		// Create a handler for the sendButton and nameField
 		class AddCalendarButtonHandler implements ClickHandler {			
 
@@ -250,6 +245,8 @@ public class Omniscience implements EntryPoint {
 		// Add a handler to close the DialogBox
 		resetFormButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				addCalendarMessageLabel.setText("");
+				addCalendarMessageLabel.setStyleName("normalLabel");
 				newCalendarUrlTextBox.setText("");
 				newLatitudeTextBox.setText("");
 				newLongitudeTextBox.setText("");
