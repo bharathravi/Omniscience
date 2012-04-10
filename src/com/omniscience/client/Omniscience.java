@@ -259,8 +259,7 @@ public class Omniscience implements EntryPoint {
 	}
 	
 	public void refreshCalendarList() {
-		tableMessageLabel.setText("Refreshing Table...");
-		calendarListPanel.remove(calendarsTable);
+		tableMessageLabel.setText("Refreshing Table...");		
 		
 		// TODO set "refreshing"  icon
 		calendarsTable.removeAllRows();		
@@ -273,7 +272,8 @@ public class Omniscience implements EntryPoint {
 				new AsyncCallback<List<SerializableCalendar>>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						globalMessageLabel.setText("Error fetching cals");						
+						tableMessageLabel.setText("Error fetching cals");
+						tableMessageLabel.setStyleName("errorLabel");
 					}
 
 					@Override
@@ -325,9 +325,9 @@ public class Omniscience implements EntryPoint {
 								}
 								
 							});
-						}
+						}						
 						tableMessageLabel.setText("");
-						calendarListPanel.add(calendarsTable);						
+						tableMessageLabel.setStyleName("normalLabel");
 					}										
 				});		
 			}		
