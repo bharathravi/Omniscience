@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Placemark><name>The 5028 Executive Committee</name>
-<description>A simple, unassuming house where world-changing decisions are taken</description>
-<point><coordinates>-84.40483,33.78765,20</coordinates>
-</point>
-</Placemark>
-</kml>
