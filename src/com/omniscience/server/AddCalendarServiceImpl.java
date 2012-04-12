@@ -71,7 +71,7 @@ AddCalendarService {
 		try {
 			XMLParser parser = new XMLParser();
 			Location loc;			
-			loc = parser.getEventsAtLocation(calendarUrl);
+			loc = parser.getEventsAtLocation(calendarUrl, 0);
 			// Check for existing cal with this url
 			Calendar cal = new Calendar(user.getUserId(), loc.getName(), latitude,   
 					longitude, altitude, loc.getDescription(),

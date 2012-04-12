@@ -28,9 +28,10 @@ public class KMLJsonGenerator extends HttpServlet {
                 double myAlt = Double.parseDouble(req.getParameter("alt"));
                 double dist = Double.parseDouble(req.getParameter("dist"));
                 int days = Integer.parseInt(req.getParameter("days"));
-
+                int timezoneOffset = Integer.parseInt(req.getParameter("tz")) * 60000;
+                             
                 CalendarServiceImpl calServ = new CalendarServiceImpl();
-                List<Location> locations = calServ.getLocationCalendars(myLat, myLng, myAlt, dist, days);
+                List<Location> locations = calServ.getLocationCalendars(myLat, myLng, myAlt, dist, days, timezoneOffset);
                 JSONGenerator jsonGen = new JSONGenerator();
 
                 resp.setContentType("application/json");

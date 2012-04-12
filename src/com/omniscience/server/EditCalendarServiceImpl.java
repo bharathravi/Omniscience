@@ -78,7 +78,7 @@ EditCalendarService {
 		try {
 			XMLParser parser = new XMLParser();
 			Location loc;			
-			loc = parser.getEventsAtLocation(calendarUrl);
+			loc = parser.getEventsAtLocation(calendarUrl, 0);
 						
 			trans.begin();
 			thisCal.setName(loc.getName());

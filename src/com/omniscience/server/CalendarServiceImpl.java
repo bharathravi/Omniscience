@@ -25,7 +25,7 @@ public class CalendarServiceImpl implements CalendarService {
 	private static final Logger log = Logger.getLogger(CalendarService.class.getName());
   
 	public List<Location> getLocationCalendars(double lat, double lng, 
-			double alt, double dist, int days) {		
+			double alt, double dist, int days, int timezoneOffset) {		
 		
 		List<Location> locations = new ArrayList<Location>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -55,8 +55,8 @@ public class CalendarServiceImpl implements CalendarService {
 				url = url.replace("+", "-");
 				
 				System.out.println(url);
-				log.info(url);
-				loc = parser.getEventsAtLocation(url);
+				log.info(url);				
+				loc = parser.getEventsAtLocation(url, timezoneOffset);
 				System.out.println(loc.getName());
 				loc.setLng(cal.getLongitude());
 				loc.setLat(cal.getLatitude()); 

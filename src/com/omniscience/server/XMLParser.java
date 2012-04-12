@@ -34,6 +34,8 @@ public class XMLParser {
 
 	private List<Event> events;
 	private Location location;
+	private int timezoneOffset;
+	
 	private DefaultHandler handler = new DefaultHandler() {		
 		private boolean inEvent = false;
 		private boolean inOriginalEvent = false;
@@ -49,17 +51,26 @@ public class XMLParser {
             	} else if (qName.equalsIgnoreCase(Constants.GD_ORIGINAL_EVENT)) {
             		inOriginalEvent = true;            		            	
             	} else if (qName.equalsIgnoreCase(Constants.GD_WHEN) && inEvent && !inOriginalEvent) {
-            	  SimpleDateFormat rfcFormat = new SimpleDateFormat("yyyy-mm-DD'T'hh:mm:ss.SSSZ");            	 
+            	  SimpleDateFormat rfcFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ");            	 
             	  String startTime = attributes.getValue(Constants.START_TIME);
             	  String endTime = attributes.getValue(Constants.END_TIME);
+            	  TimeZone tz = TimeZone.getTimeZone("GMT");
+            	  tz.setRawOffset(timezoneOffset);
+            	  System.out.println(timezoneOffset);
+            	  
+            	  DateFormat dateFormat = DateFormat.getDateTimeInstance(
+				            DateFormat.LONG, DateFormat.MEDIUM);
+            	  dateFormat.setTimeZone(tz);
+            	  
             	  try {
-					Date date = rfcFormat.parse(startTime.replaceAll("([\\+\\-]\\d\\d):(\\d\\d)","$1$2"));
-					startTime = DateFormat.getDateTimeInstance(
-				            DateFormat.LONG, DateFormat.LONG).format(date);
-				
+					Date date = rfcFormat.parse(startTime.replaceAll("([\\+\\-]\\d\\d):(\\d\\d)","$1$2"));					
+					
+					System.out.println(startTime);
+					System.out.println(startTime.replaceAll("([\\+\\-]\\d\\d):(\\d\\d)","$1$2"));										startTime = dateFormat.format(date);
+					System.out.println(startTime);
+					
 					date = rfcFormat.parse(endTime.replaceAll("([\\+\\-]\\d\\d):(\\d\\d)","$1$2"));
-					endTime = DateFormat.getDateTimeInstance(
-				            DateFormat.LONG, DateFormat.LONG).format(date);
+					endTime = dateFormat.format(date);
 				            	    
             	    event.setWhen(startTime + " to " + endTime);            	    
             	  } catch (ParseException e) {
@@ -123,9 +134,11 @@ public class XMLParser {
 
 	};
 	
-	public Location getEventsAtLocation(String link) 
+	public Location getEventsAtLocation(String link, int timezoneOffset) 
 			throws MalformedURLException, 
 			ParserConfigurationException, SAXException {
+		this.timezoneOffset = timezoneOffset;
+		
 		events = new ArrayList<Event>();
 		location = new Location();
 		

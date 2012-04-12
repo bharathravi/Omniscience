@@ -289,8 +289,7 @@ public class Omniscience implements EntryPoint {
 		heading.setStyleName("subheader");
 		
 		HTML description = new HTML();
-		description.setHTML(Constants.ABOUT);
-		
+		description.setHTML(Constants.ABOUT);		
 		aboutPanel.add(heading);
 		aboutPanel.add(description);
 		
