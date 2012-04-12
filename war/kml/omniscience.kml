@@ -61,7 +61,7 @@
 				  var myAlt = myLoc.altitude;				  				 
 				  
 				  var d = new Date()
-				  var n = d.getTimezoneOffset();
+				  var n = -1 * d.getTimezoneOffset();
 				  actualUrl = url + "?lat=" + myLat + "&lng=" + myLon + "&alt=" + myAlt + "&dist=5&days=10&tz=" + n;				  
 				  
 				  $.getJSON(actualUrl,function(json) {				
