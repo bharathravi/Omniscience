@@ -1,2 +1,0 @@
-serviceClass: com.omniscience.client.DeleteCalendarService
-path: ED2DB92D1E9EB78B57FBCCF7716F63B2.gwt.rpc
