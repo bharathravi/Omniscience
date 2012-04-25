@@ -212,9 +212,11 @@ public class Omniscience implements EntryPoint {
 		contentPanel.setStyleName("contentPanel");
 		contentPanel.setWidth("100%");
 		
-		contentPanel.add(aboutPanel);
 		contentPanel.add(addCalendarPanel);
 		contentPanel.add(calendarListPanel);
+		contentPanel.add(aboutPanel);
+		
+		
 		contentPanel.setCellWidth(aboutPanel, "30%");
 		contentPanel.setCellWidth(addCalendarPanel, "30%");
 		contentPanel.setCellWidth(calendarListPanel, "30%");
@@ -354,6 +356,7 @@ public class Omniscience implements EntryPoint {
 							calendarsTable.setWidget(row, 0, calWidget);
 							
 							Anchor editLink = new Anchor("Edit");
+							editLink.setStyleName("linkStyle");
 							calendarsTable.setWidget(row, 1, editLink);
 							calendarsTable.getRowFormatter().setStyleName(row, "calendarsTableRow");
 							editLink.addClickHandler(new ClickHandler() {								
@@ -366,6 +369,7 @@ public class Omniscience implements EntryPoint {
 							});
 							
 							final Anchor removeLink = new Anchor("Delete");
+							removeLink.setStyleName("linkStyle");
 							calendarsTable.setWidget(row, 2, removeLink);
 							removeLink.addClickHandler(new ClickHandler() {
 								@Override

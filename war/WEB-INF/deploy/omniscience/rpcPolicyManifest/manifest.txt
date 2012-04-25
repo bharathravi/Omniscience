@@ -1,2 +1,7 @@
 # Module omniscience
 # RPC service class, partial path of RPC policy file
+com.omniscience.client.AddCalendarService, 85EC9823A49C02312404C995A5DB6CCA.gwt.rpc
+com.omniscience.client.GetCalendarsService, D4BAA383291BAE2292FC8054450CE76D.gwt.rpc
+com.omniscience.client.DeleteCalendarService, ED2DB92D1E9EB78B57FBCCF7716F63B2.gwt.rpc
+com.omniscience.client.EditCalendarService, 9A64C9B518EEE4EF1994C2F885F6EDC3.gwt.rpc
+com.omniscience.client.AuthenticationService, D7770070FE5040018950E51838E87022.gwt.rpc

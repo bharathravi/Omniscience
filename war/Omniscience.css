@@ -3,26 +3,31 @@
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
-  font-size: 4em;
+  font-size: 3em;
   font-weight: bold;
-  color: black;
-  margin: 50px 0px 10px;
+  color: #000066;
+  margin: 30px 0px 10px;
   text-align: center;
-  text-shadow: 5px 5px 4px #999
+  text-shadow: 2px 2px 8px #000
 }
 
 h2 {
   font-size: 20;
   font-weight: bold;
-  color: black;
+  color: #000066;
   margin: 10px 0px 10px;
   text-align: center;
   font-style: italic;
   font-family:Arial,Helvetica,sans-serif;
+  text-shadow: 2px 2px 8px #000
 }
 
 .body {
   background-color: white;
+  background-image:url('images/vortex.jpg');
+  background-size: cover;
+  background-repeat:no-repeat;
+  
 }
 
 .addCalendarForm {
@@ -39,6 +44,9 @@ h2 {
 .statusBarPanel {
 	align: right;
 	padding: 10px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: rgba(0,150,0,0.4);
 }
 
 .contentPanel {
@@ -52,28 +60,32 @@ h2 {
      height:auto;
  	padding: 5px; 
 	align: center;
-	background-color: rgba(0,0,255,0.2);
+	border-style: solid;
+	border-color: rgba(0,150,0,0.4);
+	background-color: rgba(255,255,255,0.5);
   margin: 40px 30px 40px;
   border-radius: 10px;
   
   -moz-box-shadow: 5px 5px 4px #999;
   -webkit-box-shadow: 5px 5px 4px #999;
-  box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 5px #000;
 }
 
 .aboutPanel {
 	width: 90%;
 	 min-height:200px;
-     height:auto; 
- 	padding: 5px 5px 15px; 
+     height:auto; 0
+ 	padding: 5px 5px 5px; 
 	align: center;
-	background-color: rgba(0,0,255,0.2);
+	border-style: solid;
+	border-color: rgba(0,150,0,0.4);
+	background-color: rgba(255,255,255,0.5);
   margin: 40px 30px 40px;
   border-radius: 10px;
   
   -moz-box-shadow: 5px 5px 4px #999;
   -webkit-box-shadow: 5px 5px 4px #999;
-  box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #000;
 }
 
 
@@ -83,13 +95,15 @@ h2 {
      height:auto;     
 	padding: 5px;
 	align: center;
-	background-color: rgba(0,0,255,0.2);
+	border-style: solid;
+	border-color: rgba(0,150,0,0.4);
+	background-color: rgba(255,255,255,0.5);
   margin: 40px 30px 40px;
   border-radius: 10px;
   
   -moz-box-shadow: 5px 5px 4px #999;
   -webkit-box-shadow: 5px 5px 4px #999;
-  box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #000;
 }
 
 .calendarsTableCalName {
@@ -162,6 +176,15 @@ h2 {
 
 .logoutLink {	
 	padding: 0px 30px;
+}
+
+a:link {color:#000066 !important;}    /* unvisited link */
+a:visited {color:#000066 !important;} /* visited link */
+a:hover {color:#000066 !important; font-style:italic;}   /* mouse over link */
+a:active {color:#000066 !important;}
+
+.linkStyle {		
+		
 }	
 
 /** Set ids using widget.getElement().setId("idOfElement") */

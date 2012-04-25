@@ -24,8 +24,14 @@ margin:25px;
 padding:25px;
 
 background-color:rgba(255, 255, 255, 1.0);
-border-radius: 40px;
+border-radius: 5px;
+border-color: black;
+border-style: thick;
 -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+ -moz-box-shadow: 5px 5px 4px #999;
+  -webkit-box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #999;
 
 opacity:1;
 -webkit-transition-property: opacity, background-color; 
@@ -249,8 +255,15 @@ margin:25px;
 padding:25px;
 
 background-color:rgba(255, 255, 255, 1.0);
-border-radius: 40px;
+background-color:rgba(255, 255, 255, 1.0);
+border-color: black;
+border-style: thick;
+border-radius: 5px;
 -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+ -moz-box-shadow: 5px 5px 4px #999;
+  -webkit-box-shadow: 5px 5px 4px #999;
+  box-shadow: 5px 5px 4px #999;
 
 opacity:1;
 -webkit-transition-property: opacity, background-color; 

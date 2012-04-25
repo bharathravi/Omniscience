@@ -39,7 +39,7 @@ public class Constants {
   public static String EDIT_PAGE = "/jsp/edit.jsp";
 public static String ABOUT = "Omniscience allows you to discover what events are happening at a place" +
 		"by simply looking in its direction! " +
-		"Simply use your phone to look in the direction of a location to know what fun events" +
+		"Simply use your phone to look in the direction of a location to know what fun events " +
 		"you can join in there.<br><br>" +
 		"<i>In a new place?</i> Look around to check out what's happening!<br><br>" +
 		"<i>In the middle of a busy mall?</i> Gaze through discounts and offers around you by just turning around!<br><br>" +

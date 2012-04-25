@@ -24,7 +24,7 @@ public class SerializableCalendar implements IsSerializable {
 			this.name = cal.getName();
 		this.longitude = cal.getLongitude();
 		this.latitude = cal.getLatitude();
-		this.altitude = cal.getLongitude();
+		this.altitude = cal.getAltitude();
 		this.url = cal.getUrl();		
 		this.description = cal.getDescription();		
 	}
